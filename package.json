@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "paro": "node app.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
+    "mssql": "^11.0.1",
+    "mysql2": "^3.11.3",
+    "progress": "^2.0.3",
+    "xlsx": "^0.18.5"
+  }
+}

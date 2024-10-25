@@ -1,0 +1,52 @@
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos de configuración específicos de IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.pss
+
+# Dependencias de Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de logs
+*.log
+logs/
+*.log.*
+
+# Archivos de compilación
+dist/
+build/
+out/
+tmp/
+temp/
+
+# Archivos de Excel
+*.xlsx
+
+# Ignorar archivos de imágenes temporales
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+
+
+# Archivos de configuración de ESLint/Prettier
+.eslintcache
+
+# Archivos de paquetes instalados
+package-lock.json
+yarn.lock
+
+
