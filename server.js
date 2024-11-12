@@ -1,9 +1,16 @@
-require("dotenv").config();
-const axios = require("axios");
-const mysql = require("mysql2/promise");
-const fs = require("fs");
-const xlsx = require("xlsx");
-const ProgressBar = require("progress"); // Importar la biblioteca de progreso
+import dotenv from "dotenv";
+import express from "express";
+import mysql from "mysql2/promise";
+import fs from "fs";
+import xlsx from "xlsx";
+import cors from "cors";
+import ProgressBar from"progress"; // Importar la biblioteca de progreso
+
+dotenv.config()
+const app = express();
+app.use(cors());
+const PORT = process.env.PORT || 3001;
+
 
 const mysqlConfig = {
   host: process.env.MYSQL_HOST,
@@ -270,6 +277,50 @@ async function calcularDistancias() {
   await guardarResultados(resultados);
   console.log("Cálculo de distancias completado.");
 }
-calcularDistancias().catch((error) => {
-  console.error("Error en el proceso:", error);
+// calcularDistancias().catch((error) => {
+//   console.error("Error en el proceso:", error);
+// });
+
+
+// * Ruta para obtener empleados
+app.get("/employees", async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(mysqlConfig);
+    const [rows] = await connection.query("SELECT * FROM empleados_paro");
+    await connection.end();
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    res.status(500).send("Error fetching employees");
+  }
+});
+
+// todo pasarle un legajo para actualizar solo un registro 
+// * Endpoint para iniciar el cálculo
+// app.post("/update", async (req, res) => {
+//   try {
+//     await calcularDistancias();
+//     res.status(200).send("Cálculo de distancias completado.");
+//   } catch (error) {
+//     console.error("Error en el proceso de cálculo:", error);
+//     res.status(500).send("Error en el proceso de cálculo.");
+//   }
+// });
+
+
+
+// todo falta reuta archivo
+// app.post("/upload", async (req, res) => {
+//   try {
+//     // await xlsx(req.files.excel);
+//     res.status(200).send("Archivo cargado.");
+//   } catch (error) {
+//     console.error("Error al cargar archivo:", error);
+//     res.status(500).send("Error al cargar archivo.");
+//   }
+// });
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

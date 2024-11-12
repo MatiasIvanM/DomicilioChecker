@@ -42,13 +42,13 @@ El sistema realiza las siguientes funciones:
 
 2. Ejecuta el script:
     ```
-    node app.js
+    node server.js
     ```
 
 ## Estructura del Proyecto
 ```
 nombre_del_repositorio/
-├── app.js                 # Archivo principal donde se ejecuta el sistema
+├── server.js                 # Archivo principal donde se ejecuta el sistema
 ├── .env                   # Configuraciones de entorno (no subir a GitHub)
 ├── errors.log             # Registro de errores
 ├── DOMICILIOS.xlsx        # Archivo Excel con datos de empleados
