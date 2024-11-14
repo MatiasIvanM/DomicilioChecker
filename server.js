@@ -1,16 +1,20 @@
 import dotenv from "dotenv";
 import express from "express";
 import mysql from "mysql2/promise";
+import path from "path";
+import { fileURLToPath } from "url";
+import axios from "axios";
 import fs from "fs";
 import xlsx from "xlsx";
 import cors from "cors";
-import ProgressBar from"progress"; // Importar la biblioteca de progreso
+import ProgressBar from "progress"; // Importar la biblioteca de progreso
 
-dotenv.config()
+dotenv.config();
 const app = express();
 app.use(cors());
-const PORT = process.env.PORT || 3001;
 
+
+const PORT = process.env.PORT || 3001;
 
 const mysqlConfig = {
   host: process.env.MYSQL_HOST,
@@ -18,6 +22,11 @@ const mysqlConfig = {
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
 };
+
+
+// * Obtén el directorio actual
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); // Ahora puedes usar __dirname
 
 // * Función para guardar ERRORES en un archivo log
 function logError(errorMsg, detalles = {}) {
@@ -82,7 +91,9 @@ async function guardarResultados(resultados) {
   try {
     for (const resultado of resultados) {
       const checkQuery = `
-        SELECT COUNT(*) as count FROM empleados_paro WHERE legajo = ?`;
+                SELECT COUNT(*) as count
+                FROM empleados_paro
+                WHERE legajo = ?`;
       const [checkResult] = await connection.execute(checkQuery, [
         resultado.legajo,
       ]);
@@ -102,9 +113,16 @@ async function guardarResultados(resultados) {
 
       if (exists) {
         const updateQuery = `
-          UPDATE empleados_paro
-          SET apellido_nombre = ?, barrio = ?, partido = ?, direccion = ?, localidad = ?, sitio = ?, distancia_ave = ?, distancia_sm = ?
-          WHERE legajo = ?`;
+                    UPDATE empleados_paro
+                    SET apellido_nombre = ?,
+                        barrio          = ?,
+                        partido         = ?,
+                        direccion       = ?,
+                        localidad       = ?,
+                        sitio           = ?,
+                        distancia_ave   = ?,
+                        distancia_sm    = ?
+                    WHERE legajo = ?`;
 
         await connection.execute(updateQuery, [
           resultado.apellidoNombre,
@@ -119,8 +137,9 @@ async function guardarResultados(resultados) {
         ]);
       } else {
         const insertQuery = `
-          INSERT INTO empleados_paro (legajo, apellido_nombre, barrio, partido, direccion, localidad, sitio, distancia_ave, distancia_sm)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                    INSERT INTO empleados_paro (legajo, apellido_nombre, barrio, partido, direccion, localidad, sitio,
+                                                distancia_ave, distancia_sm)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         await connection.execute(insertQuery, insertValues);
       }
@@ -194,8 +213,6 @@ async function calcularDistancia(origen, destino) {
     return null;
   }
 }
-
-
 
 async function calcularDistancias() {
   const coordenadasAve = {
@@ -277,10 +294,10 @@ async function calcularDistancias() {
   await guardarResultados(resultados);
   console.log("Cálculo de distancias completado.");
 }
+
 // calcularDistancias().catch((error) => {
 //   console.error("Error en el proceso:", error);
 // });
-
 
 // * Ruta para obtener empleados
 app.get("/employees", async (req, res) => {
@@ -296,30 +313,51 @@ app.get("/employees", async (req, res) => {
   }
 });
 
-// todo pasarle un legajo para actualizar solo un registro 
+// todo pasarle un legajo para actualizar solo un registro
 // * Endpoint para iniciar el cálculo
-// app.post("/update", async (req, res) => {
-//   try {
-//     await calcularDistancias();
-//     res.status(200).send("Cálculo de distancias completado.");
-//   } catch (error) {
-//     console.error("Error en el proceso de cálculo:", error);
-//     res.status(500).send("Error en el proceso de cálculo.");
-//   }
-// });
+app.get("/update", async (req, res) => {
+  try {
+    await calcularDistancias();
+    res.status(200).send("Cálculo de distancias completado.");
+  } catch (error) {
+    console.error("Error en el proceso de cálculo:", error);
+    res.status(500).send("Error en el proceso de cálculo.");
+  }
+});
+
+// todo falta ruta archivo
+app.post("/upload", (req, res) => {
+  // Verifica si hay un archivo adjunto
+  if (!req.headers["content-type"].startsWith("multipart/form-data")) {
+    return res
+      .status(400)
+      .json({ message: "No se ha proporcionado un archivo" });
+  }
+
+  let fileData = [];
+  req.on("data", (chunk) => fileData.push(chunk));
+
+  req.on("end", () => {
+    const buffer = Buffer.concat(fileData);
+    const filePath = path.resolve(__dirname, "./DOMICILIOS.xlsx"); // Guarda en la raíz del proyecto
+
+    // Guarda el archivo en la raíz y reemplaza el existente
+    fs.writeFile(filePath, buffer, (err) => {
+      if (err) {
+        console.error("Error al guardar el archivo:", err);
+        return res.status(500).json({ message: "Error al guardar el archivo" });
+      }
+      res.json({ message: "Archivo subido y reemplazado correctamente" });
+    });
+  });
+
+  req.on("error", (err) => {
+    console.error("Error al recibir el archivo:", err);
+    res.status(500).json({ message: "Error al recibir el archivo" });
+  });
+});
 
 
-
-// todo falta reuta archivo
-// app.post("/upload", async (req, res) => {
-//   try {
-//     // await xlsx(req.files.excel);
-//     res.status(200).send("Archivo cargado.");
-//   } catch (error) {
-//     console.error("Error al cargar archivo:", error);
-//     res.status(500).send("Error al cargar archivo.");
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);

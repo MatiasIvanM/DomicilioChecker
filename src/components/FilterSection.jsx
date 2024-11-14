@@ -11,7 +11,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="legajo"
                         value={filters.legajo}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl focus:outline-green-500 sm:text-sm"
                         placeholder="Buscar por legajo..."
                     />
                 </div>
@@ -25,7 +25,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="nombre"
                         value={filters.nombre}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl focus:outline-green-500 sm:text-sm"
                         placeholder="Buscar por nombre..."
                     />
                 </div>
@@ -39,7 +39,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="sitio"
                         value={filters.sitio}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl  focus:outline-green-500 sm:text-sm"
                         placeholder="Buscar por sitio..."
                     />
                 </div>
@@ -53,7 +53,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="distanciaAveMin"
                         value={filters.distanciaAveMin}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl  focus:outline-green-500 sm:text-sm"
                         placeholder="Min"
                     />
                     <input
@@ -61,7 +61,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="distanciaAveMax"
                         value={filters.distanciaAveMax}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl  focus:outline-green-500 sm:text-sm"
                         placeholder="Max"
                     />
                 </div>
@@ -75,7 +75,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="distanciaSmMin"
                         value={filters.distanciaSmMin}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl  focus:outline-green-500 sm:text-sm"
                         placeholder="Min"
                     />
                     <input
@@ -83,7 +83,7 @@ function FilterSection({ filters, onFilterChange }) {
                         name="distanciaSmMax"
                         value={filters.distanciaSmMax}
                         onChange={onFilterChange}
-                        className="block w-full rounded-md border-gray-300 shadow-xl focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-xl  focus:outline-green-500 sm:text-sm"
                         placeholder="Max"
                     />
                 </div>
