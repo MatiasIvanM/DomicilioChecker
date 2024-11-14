@@ -124,9 +124,9 @@ async function guardarResultados(resultados) {
     const errorMessage = `Error al guardar resultados en MySQL: ${err.message}`;
     console.error(errorMessage);
     logError(errorMessage, {
-      legajo: resultado.legajo,
-      nombre: resultado.apellidoNombre,
-      direccion: resultado.direccion,
+      legajo: resultados.legajo,
+      nombre: resultados.apellidoNombre,
+      direccion: resultados.direccion,
     });
   } finally {
     await connection.end();
@@ -138,16 +138,20 @@ function obtenerDatosDesdeExcel(rutaArchivo) {
   const hoja = workbook.Sheets[workbook.SheetNames[0]];
   const datos = xlsx.utils.sheet_to_json(hoja);
 
-  return datos.map((fila) => ({
+  const datosfiltrados= datos.map((fila) => ({
     legajo: fila.Legajo,
     apellidoNombre: fila["Apellido y Nombre"],
     barrio: fila.Barrio || null,
     partido: fila.Partido || null,
     localidad: fila.Localidad || null,
-    provincia: fila.Provincia,
-    sitio: fila.Sitio,
+    provincia: fila.Provincia || null,
+    sitio: fila.Sitio || null,
     direccion: `${fila.Calle} ${fila.Nº}, ${fila.Barrio}, ${fila.Localidad}, ${fila.Provincia}, Argentina`,
   }));
+
+ console.log("🚀 ~ datosfiltrados:", datosfiltrados)
+
+ return datosfiltrados;
 }
 
 async function obtenerCoordenadasGoogle(direccion) {
