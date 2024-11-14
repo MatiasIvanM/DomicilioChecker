@@ -164,7 +164,7 @@ function obtenerDatosDesdeExcel(rutaArchivo) {
   const hoja = workbook.Sheets[workbook.SheetNames[0]];
   const datos = xlsx.utils.sheet_to_json(hoja);
 
-  return datos.map((fila) => ({
+  const dataFiltered = datos.map((fila) => ({
     legajo: fila.Legajo,
     apellidoNombre: fila["Apellido y Nombre"],
     barrio: fila.Barrio || null,
@@ -174,6 +174,8 @@ function obtenerDatosDesdeExcel(rutaArchivo) {
     sitio: fila.Sitio,
     direccion: `${fila.Calle} ${fila.Nº}, ${fila.Barrio}, ${fila.Localidad}, ${fila.Provincia}, Argentina`,
   }));
+
+  return dataFiltered;
 }
 
 async function obtenerCoordenadasGoogle(direccion) {
@@ -287,6 +289,7 @@ async function calcularDistancias() {
       console.error(errorMessage);
       logError(errorMessage);
     }
+      // console.log("🚀 ~ calcularDistancias ~ resultados:", resultados)
 
     bar.tick();
   }
@@ -360,5 +363,5 @@ app.post("/upload", (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en ${PORT}`);
 });
